@@ -1,0 +1,47 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 10px;
+}
+
+#clear {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+#backspace {
+    grid-column-start: 3;
+    grid-column-end: 5;
+}
+
+#display {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    height: 50px;
+    border: 3px solid black;
+    border-radius: 5px;
+}
+
+button.grid-item {
+    padding: 20px;
+}
+
+#display-top,
+#display-bottom {
+    height: 50%;
+
+}
+
+
+
