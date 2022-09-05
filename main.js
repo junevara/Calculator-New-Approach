@@ -2,7 +2,8 @@ const interface = document.querySelector('.grid-container');
 const buttons = interface.querySelectorAll('button');
 const calcDisplayBottom = interface.querySelector('#display-bottom');
 const calcDisplayTop = interface.querySelector('#display-top');
-
+const commaButton = interface.querySelector('#comma');
+const equalsButton = interface.querySelector('#equals');
 
 calcDisplayBottom.textContent = '0';
 let input = '';
@@ -14,29 +15,48 @@ let operator = '';
 let operator1 = '';
 let operator2 = '';
 let result = null;
-let followResult = 0;
-let readyToCalculate = false;
 let changeOperator = false;
-
 let countOperator = 0;
-
-
+let resultEvaluated = false;
+let commaSet = false;
+commaButton.setAttribute('disabled', '');
+equalsButton.setAttribute('disabled', '');
 
 function getInput(x){
     changeOperator = false;
     input += x;
+    
+    if(input === '' || (isNaN(+input.slice(-1)) && input.slice(-1) !== '.' && x !== 'backspace') || (!operator1)){
+        equalsButton.setAttribute('disabled', '');
+
+    }
+    else {
+        equalsButton.removeAttribute('disabled');
+    }
+
     if (!isNaN(x) || x === '.'){    
         operant += x; 
+        
     }
-    else if (isNaN(x) && x !== '.'){
+    
+    if (isNaN(x) && x !== '.' && x !== 'backspace'){
         operator = x;
+        
         countOperator++;
-        if(isNaN(+input.slice(-1)) && isNaN(+input.slice(-2, -1))){
+        
+        if(isNaN(+input.slice(-1)) && isNaN(+input.slice(-2, -1)) && input.slice(-1) !== '.' && input.slice(-2, -1) !== '.'){
             countOperator--;
             changeOperator = true;
         }
         operatorDisplay = operator;
-    }    
+    }  
+    
+    if (operant.indexOf('.') === -1){
+        commaButton.removeAttribute('disabled');
+    }
+    else {
+        commaButton.setAttribute('disabled', '');
+    }
 
     if (operator && operant1 === ''){
         
@@ -79,6 +99,51 @@ function displayResult(){
     operator2 = '';
 }
 
+
+function clear(){
+    console.log('alert');
+    calcDisplayBottom.textContent = '0';
+    input = '';
+    operant = '';
+    operant1 = '';
+    operant2 = '';
+    operatorDisplay = '';
+    operator = '';
+    operator1 = '';
+    operator2 = '';
+    result = null;
+    changeOperator = false;
+    countOperator = 0;
+    resultEvaluated = false;
+    calcDisplayTop.textContent = '';
+
+}
+
+
+function backspace(x){
+    if (resultEvaluated && x === 'backspace' && input.slice(-10, -9) === '='){
+        
+        clear();
+        
+        return;
+    }
+    operant = operant.substring(0, operant.length - 1);
+    console.log('alert2');
+    input = input.substring(0, input.length - 9);
+    
+    if (operant.indexOf('.') === -1){
+        commaButton.removeAttribute('disabled');
+    }
+    else {
+        commaButton.setAttribute('disabled', '');
+    }
+    if (operant === ''){
+        equalsButton.setAttribute('disabled', '');
+    }
+}
+
+
+
 function operate(operantFirst, operator, operantSecond){
     
     if (operator === '/'){
@@ -102,6 +167,7 @@ function operate(operantFirst, operator, operantSecond){
         
         operant = '';
         operator = '';
+        operant2 = '';
         operator2 = '';
         calcDisplayBottom.textContent = '0';
     }
@@ -113,9 +179,16 @@ buttons.forEach(button => button.addEventListener('click', function(){
     let lastCharacter = this.textContent;
     getInput(lastCharacter);
     
-    displayBottom();
-
     
+
+    if (lastCharacter === 'backspace'){
+        backspace(lastCharacter);
+    }
+    
+    
+    if(input){
+        displayBottom();
+    }
     
     if(countOperator == 2){
         
@@ -128,8 +201,26 @@ buttons.forEach(button => button.addEventListener('click', function(){
     }
 
     if (lastCharacter === '='){
+        
+        resultEvaluated = true;
         displayResult();
+
     }
+
+    if (resultEvaluated && !isNaN(+lastCharacter) && input.slice(-2, -1 ) === '='){
+        
+        clear();
+        operant = lastCharacter;
+        displayBottom();
+    }
+    
+
+    if (lastCharacter === 'clear'){
+        clear();
+    }
+    
+
+    
     
 
     
