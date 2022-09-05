@@ -3,6 +3,8 @@ const buttons = interface.querySelectorAll('button');
 const calcDisplayBottom = interface.querySelector('#display-bottom');
 const calcDisplayTop = interface.querySelector('#display-top');
 
+
+calcDisplayBottom.textContent = '0';
 let input = '';
 let operant = '';
 let operant1 = '';
@@ -23,11 +25,8 @@ let countOperator = 0;
 function getInput(x){
     changeOperator = false;
     input += x;
-    if (!isNaN(x) || x === '.'){
-        
-        operant += x;
-        
-        
+    if (!isNaN(x) || x === '.'){    
+        operant += x; 
     }
     else if (isNaN(x) && x !== '.'){
         operator = x;
@@ -37,9 +36,7 @@ function getInput(x){
             changeOperator = true;
         }
         operatorDisplay = operator;
-    }
-    
-    
+    }    
 
     if (operator && operant1 === ''){
         
@@ -48,8 +45,6 @@ function getInput(x){
         operatorDisplay = operator;
         operant = '';
         operator = '';
-        
-
     }
     
     if (changeOperator === true){
@@ -60,17 +55,8 @@ function getInput(x){
     if (countOperator === 2){
         
         operant2 = operant;
-        operator2 = operator;
-        
-        
+        operator2 = operator;  
     }
-    
-    
-
-
-
-
-
 }
 
 function displayBottom(){
@@ -79,6 +65,18 @@ function displayBottom(){
 
 function displayTop(){
     calcDisplayTop.textContent = `${operant1} ${operatorDisplay} ${operant}`;
+}
+
+function displayResult(){
+    calcDisplayBottom.textContent = result;
+    calcDisplayTop.textContent = `${operant1} ${operator1} ${operant} =`;
+    operant1 = result;
+    operator1 = operator2;
+    countOperator = 1;
+    
+    operant = '';
+    operator = '';
+    operator2 = '';
 }
 
 function operate(operantFirst, operator, operantSecond){
@@ -95,15 +93,18 @@ function operate(operantFirst, operator, operantSecond){
     if (operator === '+'){
         result = (+operantFirst) + (+operantSecond);
     }
+
     
-    operant1 = result;
-    operator1 = operator2;
-    countOperator = 1;
-    
-    operant = '';
-    operator = '';
-    operator2 = '';
-    
+    if(operator2 !== '='){
+        operant1 = result;
+        operator1 = operator2;
+        countOperator = 1;
+        
+        operant = '';
+        operator = '';
+        operator2 = '';
+        calcDisplayBottom.textContent = '0';
+    }
     
 }
 
@@ -114,6 +115,8 @@ buttons.forEach(button => button.addEventListener('click', function(){
     
     displayBottom();
 
+    
+    
     if(countOperator == 2){
         
         operate(operant1, operator1, operant2);
@@ -123,6 +126,11 @@ buttons.forEach(button => button.addEventListener('click', function(){
         
         displayTop();
     }
+
+    if (lastCharacter === '='){
+        displayResult();
+    }
+    
 
     
 }));
