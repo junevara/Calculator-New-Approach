@@ -19,6 +19,7 @@ let changeOperator = false;
 let countOperator = 0;
 let resultEvaluated = false;
 let commaSet = false;
+let zeroDivision = false;
 commaButton.setAttribute('disabled', '');
 equalsButton.setAttribute('disabled', '');
 
@@ -51,11 +52,13 @@ function getInput(x){
         operatorDisplay = operator;
     }  
     
-    if (operant.indexOf('.') === -1){
+    if (operant.indexOf('.') === -1 && operant !== ''){
         commaButton.removeAttribute('disabled');
+        
     }
     else {
         commaButton.setAttribute('disabled', '');
+        
     }
 
     if (operator && operant1 === ''){
@@ -101,7 +104,7 @@ function displayResult(){
 
 
 function clear(){
-    console.log('alert');
+    
     calcDisplayBottom.textContent = '0';
     input = '';
     operant = '';
@@ -116,6 +119,8 @@ function clear(){
     countOperator = 0;
     resultEvaluated = false;
     calcDisplayTop.textContent = '';
+    commaButton.setAttribute('disabled', '');
+    equalsButton.setAttribute('disabled', '');
 
 }
 
@@ -128,10 +133,10 @@ function backspace(x){
         return;
     }
     operant = operant.substring(0, operant.length - 1);
-    console.log('alert2');
+    
     input = input.substring(0, input.length - 9);
     
-    if (operant.indexOf('.') === -1){
+    if (operant.indexOf('.') === -1 && operant !== ''){
         commaButton.removeAttribute('disabled');
     }
     else {
@@ -142,11 +147,20 @@ function backspace(x){
     }
 }
 
+function precisionRound(number, precision) {
+    var factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
+}
 
 
 function operate(operantFirst, operator, operantSecond){
-    
+    console.log(operantSecond);
     if (operator === '/'){
+        if (+operantSecond === 0){
+            calcDisplayBottom.textContent = "You can't divide by zero!";
+            zeroDivision = true;
+            return;
+        }
         result = (+operantFirst) / (+operantSecond);
     }
     if (operator === 'x'){
@@ -159,6 +173,7 @@ function operate(operantFirst, operator, operantSecond){
         result = (+operantFirst) + (+operantSecond);
     }
 
+    result = precisionRound(result, 10);
     
     if(operator2 !== '='){
         operant1 = result;
@@ -175,6 +190,10 @@ function operate(operantFirst, operator, operantSecond){
 }
 
 buttons.forEach(button => button.addEventListener('click', function(){
+    if (zeroDivision){
+        clear();
+        zeroDivision = false;
+    }
     
     let lastCharacter = this.textContent;
     getInput(lastCharacter);
@@ -200,7 +219,7 @@ buttons.forEach(button => button.addEventListener('click', function(){
         displayTop();
     }
 
-    if (lastCharacter === '='){
+    if (lastCharacter === '=' && calcDisplayBottom.textContent !== "You can't divide by zero!" ){
         
         resultEvaluated = true;
         displayResult();
