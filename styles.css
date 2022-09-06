@@ -10,37 +10,68 @@ body {
 }
 
 .grid-container {
+    
     display: grid;
     grid-template-columns: auto auto auto auto;
     gap: 10px;
+    min-height: min-content;
+    padding: 30px;
+    background-color: gray;
+    border-radius: 10px;
 }
 
 #clear {
     grid-column-start: 1;
     grid-column-end: 3;
+    background-color: rgb(211, 117, 117);
 }
 
 #backspace {
     grid-column-start: 3;
     grid-column-end: 5;
+    background-color: rgb(139, 139, 223);
 }
 
 #display {
     grid-column-start: 1;
     grid-column-end: 5;
-    height: 50px;
+    min-height: 64px;
+    width: 205px;
+    height: min-content;
     border: 3px solid black;
     border-radius: 5px;
     text-align: right;
+    padding: 10px;
+    background-color: antiquewhite;
+    font-size: 25px;
+}
+
+#display-bottom {
+    font-size: 30px;
+    font-weight: bold;
+    
+}
+
+#display-top {
+    font-size: 20px;
 }
 
 button.grid-item {
     padding: 20px;
+    border-radius: 10px;
+    border: 1px solid;
+   
+    
 }
+
 
 #display-top,
 #display-bottom {
-    height: 50%;
+    min-height: 32px;
+    word-wrap: break-word;
+    word-break: break-all;
+    
+    height: min-content;
 
 }
 
