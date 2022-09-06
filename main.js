@@ -30,6 +30,8 @@ function getInput(x){
     input += x;
     
     if(input === '' || (isNaN(+input.slice(-1)) && input.slice(-1) !== '.' && x !== 'backspace') || (!operator1)){
+        equalsButton.style.border = '1px solid black';
+        equalsButton.style.padding = '20px';
         equalsButton.setAttribute('disabled', '');
 
     }
@@ -60,6 +62,8 @@ function getInput(x){
         
     }
     else {
+        commaButton.style.border = '1px solid black';
+        commaButton.style.padding = '20px';
         commaButton.setAttribute('disabled', '');
         
     }
@@ -144,9 +148,13 @@ function backspace(x){
         commaButton.removeAttribute('disabled');
     }
     else {
+        commaButton.style.border = '1px solid black';
+        commaButton.style.padding = '20px';
         commaButton.setAttribute('disabled', '');
     }
     if (operant === ''){
+        equalsButton.style.border = '1px solid black';
+        equalsButton.style.padding = '20px';
         equalsButton.setAttribute('disabled', '');
     }
 }
@@ -202,12 +210,9 @@ buttons.forEach(button => button.addEventListener('click', function(){
     let lastCharacter = this.textContent;
     getInput(lastCharacter);
     
-    
-
     if (lastCharacter === 'backspace'){
         backspace(lastCharacter);
     }
-    
     
     if(input){
         displayBottom();
@@ -227,7 +232,6 @@ buttons.forEach(button => button.addEventListener('click', function(){
         
         resultEvaluated = true;
         displayResult();
-
     }
 
     if (resultEvaluated && !isNaN(+lastCharacter) && input.slice(-2, -1 ) === '='){
@@ -236,16 +240,23 @@ buttons.forEach(button => button.addEventListener('click', function(){
         operant = lastCharacter;
         displayBottom();
     }
-    
 
     if (lastCharacter === 'clear'){
         clear();
     }
     
-
-    
-    
-
-    
 }));
+
+function buttonHover() {
+    this.style.border = '3px solid white';
+    this.style.padding = '18px';
+}
+
+function buttonStandard(){
+    this.style.border = '1px solid black';
+    this.style.padding = '20px';
+}
+
+buttons.forEach(button => button.addEventListener('mouseover', buttonHover));
+buttons.forEach(button => button.addEventListener('mouseout', buttonStandard));
 
