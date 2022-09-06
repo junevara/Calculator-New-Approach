@@ -22,6 +22,8 @@ let commaSet = false;
 let zeroDivision = false;
 commaButton.setAttribute('disabled', '');
 equalsButton.setAttribute('disabled', '');
+let charCount = 0;
+let operantWithBreaks = '';
 
 function getInput(x){
     changeOperator = false;
@@ -35,8 +37,9 @@ function getInput(x){
         equalsButton.removeAttribute('disabled');
     }
 
-    if (!isNaN(x) || x === '.'){    
+    if ((!isNaN(x) || x === '.')){    
         operant += x; 
+        
         
     }
     
@@ -83,7 +86,8 @@ function getInput(x){
 }
 
 function displayBottom(){
-    calcDisplayBottom.textContent = operant;
+        calcDisplayBottom.textContent = operant;
+    
 }
 
 function displayTop(){
@@ -173,7 +177,7 @@ function operate(operantFirst, operator, operantSecond){
         result = (+operantFirst) + (+operantSecond);
     }
 
-    result = precisionRound(result, 10);
+    result = precisionRound(result, 20);
     
     if(operator2 !== '='){
         operant1 = result;
