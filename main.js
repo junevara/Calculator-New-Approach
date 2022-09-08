@@ -4,6 +4,7 @@ const calcDisplayBottom = interface.querySelector('#display-bottom');
 const calcDisplayTop = interface.querySelector('#display-top');
 const commaButton = interface.querySelector('#comma');
 const equalsButton = interface.querySelector('#equals');
+const zeroButton = interface.querySelector('#zero');
 
 calcDisplayBottom.textContent = '0';
 let input = '';
@@ -44,6 +45,17 @@ function getInput(x){
         
         
     }
+
+    if (operant.slice(0, 1) === '0' && operant.indexOf('.') === -1){
+        zeroButton.style.border = '1px solid black';
+        zeroButton.style.padding = '20px';
+        zeroButton.setAttribute('disabled', '');
+    }
+    else {
+        zeroButton.removeAttribute('disabled');
+    }
+
+  
     
     if (isNaN(x) && x !== '.' && x !== 'backspace'){
         operator = x;
@@ -67,6 +79,13 @@ function getInput(x){
         commaButton.setAttribute('disabled', '');
         
     }
+
+    if (isNaN(+input.slice(-1)) && input.slice(-1) !== '.'){
+        commaButton.style.border = '1px solid black';
+        commaButton.style.padding = '20px';
+        commaButton.setAttribute('disabled', '');
+    }
+
 
     if (operator && operant1 === ''){
         
@@ -166,7 +185,7 @@ function precisionRound(number, precision) {
 
 
 function operate(operantFirst, operator, operantSecond){
-    console.log(operantSecond);
+    
     if (operator === '/'){
         if (+operantSecond === 0){
             calcDisplayBottom.textContent = "You can't divide by zero!";
@@ -185,7 +204,7 @@ function operate(operantFirst, operator, operantSecond){
         result = (+operantFirst) + (+operantSecond);
     }
 
-    result = precisionRound(result, 20);
+    result = precisionRound(result, 7);
     
     if(operator2 !== '='){
         operant1 = result;
